@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'node' // El nombre debe coincidir con el configurado en Jenkins
+    }
+
     environment {
         // Asigna el puerto según la rama
         PORT = "${env.BRANCH_NAME == 'main' ? '3000' : '3001'}"
