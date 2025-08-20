@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         // Asigna el puerto según la rama
-        PORT = "${env.BRANCH_NAME == 'main' ? '3000' : '3001'}"
+        PORT = "${env.BRANCH_NAME == 'main' ? '3000' : (env.BRANCH_NAME == 'dev' ? '3001' : '')}"
         IMAGE_NAME = "cicd-app:${env.BRANCH_NAME}"
     }
 
