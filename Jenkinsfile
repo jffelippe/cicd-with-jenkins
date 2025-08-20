@@ -9,7 +9,7 @@ pipeline {
     environment {
         // Asigna el puerto según la rama
         PORT = "${env.BRANCH_NAME == 'main' ? '3000' : (env.BRANCH_NAME == 'dev' ? '3001' : '')}"
-        IMAGE_NAME = "cicd-app:${env.BRANCH_NAME}"
+        IMAGE_NAME = "${env.BRANCH_NAME == 'main' ? 'nodemain:v1.0' : (env.BRANCH_NAME == 'dev' ? 'nodedev:v1.0' : '')}"
     }
 
     stages {
@@ -43,8 +43,8 @@ pipeline {
                 script {
                     // Detiene y elimina cualquier contenedor anterior en el mismo puerto
                     sh """
-                        docker ps -q --filter "publish=${PORT}" | xargs -r docker stop
-                        docker ps -aq --filter "publish=${PORT}" | xargs -r docker rm
+                        docker ps -q --filter "name=cicd-app-${env.BRANCH_NAME}" | xargs -r docker stop
+                        docker ps -aq --filter "name=cicd-app-${env.BRANCH_NAME}" | xargs -r docker rm
                         docker run -d -p ${PORT}:3000 -e PORT=${PORT} --name cicd-app-${env.BRANCH_NAME} ${IMAGE_NAME}
                     """
                 }
